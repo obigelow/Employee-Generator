@@ -1,0 +1,15 @@
+.team-heading {
+    background-color: rgb(219, 98, 54);
+    color: whitesmoke;
+}
+
+.employee-card {
+    color: rgb(66, 66, 66);
+    width: 50%;
+    margin: 25px;
+}
+
+.card-header {
+    background-color: rgb(0, 150, 150);
+    color: white;
+}

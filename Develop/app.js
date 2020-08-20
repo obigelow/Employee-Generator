@@ -6,44 +6,147 @@ const path = require("path");
 const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
+console.log(__dirname)
 const outputPath = path.join(OUTPUT_DIR, "team.html");
+console.log(outputPath)
+
 
 const render = require("./lib/htmlRenderer");
 
+console.log(render)
+
 const employees = [];
 
-engineer = () => {
-
-}
-
-inquirer.prompt([
+const managerQuestions = [
     {
         type: "input",
-        message: "Who is your team manager?",
-        name: "manager-name"
+        message: "What is you managers name?",
+        name: "name"
     },
     {
         type: "input",
         message: "What is your managers id?",
-        name: "manager-id"
+        name: "id"
     },
     {
         type: "input",
         message: "What is your managers email?",
-        name: "manager-email"
+        name: "email"
     },
     {
         type: "input",
         message: "What is your managers office number?",
-        name: "manager-office"
+        name: "office"
+    }
+]
+
+const internQuestions = [
+    {
+        type: "input",
+        message: "What is your interns name?",
+        name: "name"
     },
     {
-        type: "list",
-        message: "Would you like any more team memebrs?",
-        choices: ["intern", "enigineer"],
-        name: "more"
+        type: "input",
+        message: "What is your interns id?",
+        name: "id"
     },
-])
+    {
+        type: "input",
+        message: "What is your intern email?",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "What school does this interns go to?",
+        name: "school"
+    }
+]
+
+
+const engineerQuestions = [
+    {
+        type: "input",
+        message: "What is your engineers name?",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "What is your engineers id?",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "What is your engineers email?",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "What is your engineers github?",
+        name: "github"
+    }
+]
+
+const memberQuestion = [{
+    type: "list",
+    message: "What role does your next employee have?",
+    choices: ["intern", "engineer", "I do not have any more team members"],
+    name: "team"
+}]
+
+
+async function askQuestions() {
+
+    try {
+        const newmember = await inquirer.prompt(memberQuestion)
+
+
+
+        // console.log(newmember.team);
+        if (newmember.team === "intern") {
+            const askIntern = await inquirer.prompt(internQuestions)
+            const newIntern = new Intern(askIntern.name, askIntern.id, askIntern.email, askIntern.school)
+            employees.push(newIntern)
+            console.log(newIntern)
+            askQuestions()
+            return askIntern
+        }
+        else if (newmember.team === "engineer") {
+            const askEngineer = await inquirer.prompt(engineerQuestions)
+            const newEngineer = new Engineer(askEngineer.name, askEngineer.id, askEngineer.email, askEngineer.github)
+            employees.push(newEngineer)
+            console.log(newEngineer)
+            askQuestions()
+            return askEngineer
+        }
+        else {
+            console.log(employees)
+            const rendered = render(employees)
+            fs.writeFile("team.html", rendered, (err) => {
+                if (err) {
+                    throw err;
+                }
+            })
+            return;
+        }
+
+    } catch (err) { throw err; }
+
+
+
+}
+
+inquirer.prompt(managerQuestions).then(function(res){
+    const newManager = new Manager(res.name, res.id, res.email, res.office)
+    employees.push(newManager)
+    console.log(newManager);
+    askQuestions()
+})
+
+
+
+
+
 
 
 // Write code to use inquirer to gather information about the development team members,
