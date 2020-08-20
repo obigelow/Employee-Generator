@@ -6,9 +6,7 @@ const path = require("path");
 const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
-console.log(__dirname)
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-console.log(outputPath)
 
 
 const render = require("./lib/htmlRenderer");
@@ -122,7 +120,7 @@ async function askQuestions() {
         else {
             console.log(employees)
             const rendered = render(employees)
-            fs.writeFile("team.html", rendered, (err) => {
+            fs.writeFile(outputPath, rendered, (err) => {
                 if (err) {
                     throw err;
                 }
