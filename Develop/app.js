@@ -11,8 +11,6 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-console.log(render)
-
 const employees = [];
 
 const managerQuestions = [
@@ -98,16 +96,12 @@ async function askQuestions() {
     try {
         const newmember = await inquirer.prompt(memberQuestion)
 
-
-
-        // console.log(newmember.team);
         if (newmember.team === "intern") {
             const askIntern = await inquirer.prompt(internQuestions)
             const newIntern = new Intern(askIntern.name, askIntern.id, askIntern.email, askIntern.school)
             employees.push(newIntern)
             console.log(newIntern)
             askQuestions()
-            return askIntern
         }
         else if (newmember.team === "engineer") {
             const askEngineer = await inquirer.prompt(engineerQuestions)
@@ -115,7 +109,6 @@ async function askQuestions() {
             employees.push(newEngineer)
             console.log(newEngineer)
             askQuestions()
-            return askEngineer
         }
         else {
             console.log(employees)
